@@ -10,8 +10,9 @@ public abstract class Member {
     private String memberUsername;
     private String departmantName;
     private int bookLimit;
+    private int avaibleRequestLimit;
     
-    public Member(String memberID, String memberName, String memberSurname, String memberPhone, String memberAddress, String memberMail, String memberUsername, String departmantName, int bookLimit) {        
+    public Member(String memberID, String memberName, String memberSurname, String memberPhone, String memberAddress, String memberMail, String memberUsername, String departmantName, int bookLimit, int avaibleRequestLimit) {        
         this.memberID = memberID;
         this.memberName = memberName;
         this.memberSurname = memberSurname;
@@ -21,6 +22,7 @@ public abstract class Member {
         this.memberUsername = memberUsername;
         this.departmantName = departmantName;
         this.bookLimit = bookLimit;
+        this.avaibleRequestLimit = avaibleRequestLimit;
     }
     
     public void printPersonalInfo(){
@@ -37,6 +39,14 @@ public abstract class Member {
     
     public String getUserName(){
         return memberName+" "+memberSurname;
+    }
+    
+    public String getUserID(){
+        return memberID;
+    }
+    
+    public int getMemberCurrentRight(){
+        return avaibleRequestLimit;
     }
     
 }

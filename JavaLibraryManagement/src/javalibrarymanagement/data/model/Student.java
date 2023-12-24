@@ -6,8 +6,8 @@ public class Student extends Member{
     private int grade;
     private String studentNumber;
 
-    public Student(String memberID, String memberName, String memberSurname, String memberPhone, String memberAddress, String memberMail, String memberUsername, String departmantName, int bookLimit, int grade, String studentNumber) {
-        super(memberID, memberName, memberSurname, memberPhone, memberAddress, memberMail, memberUsername, departmantName, bookLimit);
+    public Student(String memberID, String memberName, String memberSurname, String memberPhone, String memberAddress, String memberMail, String memberUsername, String departmantName, int bookLimit, int avaibleRequestLimit, int grade, String studentNumber) {
+        super(memberID, memberName, memberSurname, memberPhone, memberAddress, memberMail, memberUsername, departmantName, bookLimit, avaibleRequestLimit);
         this.grade = grade;
         this.studentNumber = studentNumber;
     }

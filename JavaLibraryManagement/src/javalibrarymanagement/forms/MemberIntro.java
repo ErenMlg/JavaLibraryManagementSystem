@@ -1,16 +1,43 @@
 
-package javalibrarymanagement;
+package javalibrarymanagement.forms;
 
+import java.sql.Statement;
+import java.sql.ResultSet;
+import javalibrarymanagement.data.SingletonDataWorks;
 import javalibrarymanagement.data.model.*;
+import javax.swing.table.DefaultTableModel;
 
 public class MemberIntro extends javax.swing.JFrame {
     
     private Member currentMember;
+    private Statement statement;
+    private ResultSet results;
+    private DefaultTableModel model;
 
     public MemberIntro(Member member) {
         initComponents();
         currentMember = member;
+        txtRights.setText("Current Books & Avaible Right : "+member.getMemberCurrentRight());
         txtWelcome.setText(currentMember.getUserName());
+        statement = SingletonDataWorks.getStatement();
+        model = (DefaultTableModel)tblCurrentBooks.getModel();
+        try{
+            results = statement.executeQuery("SELECT bi.bookISBN, b.bookName, bi.issueStatus, bi.issueDate, bi.returnDate, CONCAT(l.librarianName, ' ', l.librarianSurname) AS librarianName, CONCAT(a.authorName, ' ', a.authorLastName) AS authorName FROM library_management_system.book_issue bi JOIN library_management_system.book b ON bi.bookISBN = b.bookISBN JOIN library_management_system.member m ON bi.memberID = m.memberID JOIN library_management_system.librarian l ON bi.librarianID = l.librarianID JOIN library_management_system.book_author ba ON ba.bookISBN = bi.bookISBN JOIN library_management_system.author a ON ba.authorID = a.authorID WHERE bi.memberID='"+member.getUserID()+"'");
+            while(results.next()){
+                Object[] row = {
+                    results.getString("bookISBN"),
+                    results.getString("bookName"),
+                    results.getString("authorName"),
+                    results.getString("librarianName"),
+                    results.getString("issueStatus"),
+                    results.getString("issueDate"),
+                    results.getString("returnDate")
+                };
+                model.addRow(row);
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -27,9 +54,9 @@ public class MemberIntro extends javax.swing.JFrame {
         btnEventCalendar = new javax.swing.JButton();
         btnShowAnnouncements = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        currentBooks = new javax.swing.JTable();
+        tblCurrentBooks = new javax.swing.JTable();
         btnExit = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        txtRights = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -41,7 +68,7 @@ public class MemberIntro extends javax.swing.JFrame {
         Right.setBackground(new java.awt.Color(0, 102, 102));
         Right.setPreferredSize(new java.awt.Dimension(400, 500));
 
-        jLabel5.setIcon(new javax.swing.ImageIcon("C:\\Users\\erenm\\Desktop\\Desktop\\Dersler\\YM\\Odev\\LibraryManagementSystem\\JavaLibraryManagementSystem\\JavaLibraryManagement\\library.png")); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/javalibrarymanagement/library.png"))); // NOI18N
         jLabel5.setText("jLabel5");
 
         jLabel6.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
@@ -83,11 +110,16 @@ public class MemberIntro extends javax.swing.JFrame {
         btnShowBooks.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         btnShowBooks.setForeground(new java.awt.Color(255, 255, 255));
         btnShowBooks.setText("Show Books");
+        btnShowBooks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowBooksActionPerformed(evt);
+            }
+        });
 
         btnShowProfile.setBackground(new java.awt.Color(0, 102, 102));
         btnShowProfile.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         btnShowProfile.setForeground(new java.awt.Color(255, 255, 255));
-        btnShowProfile.setText("Profile");
+        btnShowProfile.setText("Book Request");
 
         btnEventCalendar.setBackground(new java.awt.Color(0, 102, 102));
         btnEventCalendar.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
@@ -99,23 +131,44 @@ public class MemberIntro extends javax.swing.JFrame {
         btnShowAnnouncements.setForeground(new java.awt.Color(255, 255, 255));
         btnShowAnnouncements.setText("Announcements");
 
-        currentBooks.setModel(new javax.swing.table.DefaultTableModel(
+        tblCurrentBooks.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ISBN", "Name", "Author", "Librarian", "Status", "Borrowing Date", "Return Date"
             }
-        ));
-        jScrollPane1.setViewportView(currentBooks);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
 
-        btnExit.setIcon(new javax.swing.ImageIcon("C:\\Users\\erenm\\Desktop\\Desktop\\Dersler\\YM\\Odev\\LibraryManagementSystem\\JavaLibraryManagementSystem\\JavaLibraryManagement\\exit.png")); // NOI18N
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
-        jLabel1.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        jLabel1.setText("Current Books & Avaible Right : 3");
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblCurrentBooks);
+        if (tblCurrentBooks.getColumnModel().getColumnCount() > 0) {
+            tblCurrentBooks.getColumnModel().getColumn(0).setResizable(false);
+            tblCurrentBooks.getColumnModel().getColumn(1).setResizable(false);
+            tblCurrentBooks.getColumnModel().getColumn(2).setResizable(false);
+            tblCurrentBooks.getColumnModel().getColumn(3).setResizable(false);
+            tblCurrentBooks.getColumnModel().getColumn(4).setResizable(false);
+            tblCurrentBooks.getColumnModel().getColumn(5).setResizable(false);
+            tblCurrentBooks.getColumnModel().getColumn(6).setResizable(false);
+        }
+
+        btnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/javalibrarymanagement/exit.png"))); // NOI18N
+
+        txtRights.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        txtRights.setText("Current Books & Avaible Right : ?");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -138,7 +191,7 @@ public class MemberIntro extends javax.swing.JFrame {
                             .addComponent(btnShowBooks, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(btnShowAnnouncements, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel1))
+                    .addComponent(txtRights))
                 .addGap(36, 36, 36))
         );
         jPanel1Layout.setVerticalGroup(
@@ -149,7 +202,7 @@ public class MemberIntro extends javax.swing.JFrame {
                     .addComponent(txtWelcome)
                     .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1)
+                .addComponent(txtRights)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -180,6 +233,12 @@ public class MemberIntro extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnShowBooksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowBooksActionPerformed
+             new ShowBooksForMember(currentMember).setVisible(true);
+             this.setVisible(false);
+             this.dispose();
+    }//GEN-LAST:event_btnShowBooksActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Right;
@@ -188,13 +247,13 @@ public class MemberIntro extends javax.swing.JFrame {
     private javax.swing.JButton btnShowAnnouncements;
     private javax.swing.JButton btnShowBooks;
     private javax.swing.JButton btnShowProfile;
-    private javax.swing.JTable currentBooks;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblCurrentBooks;
+    private javax.swing.JLabel txtRights;
     private javax.swing.JLabel txtWelcome;
     // End of variables declaration//GEN-END:variables
 }
