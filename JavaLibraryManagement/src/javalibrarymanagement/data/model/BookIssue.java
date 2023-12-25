@@ -5,6 +5,34 @@
 package javalibrarymanagement.data.model;
 
 public class BookIssue {
+
+    public String getISBN() {
+        return ISBN;
+    }
+
+    public String getBookName() {
+        return bookName;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public String getLibrarianName() {
+        return librarianName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getBorrowingDate() {
+        return borrowingDate;
+    }
+
+    public String getReturnDate() {
+        return returnDate;
+    }
     private String ISBN;
     private String bookName;
     private String authorName;

@@ -1,6 +1,7 @@
 package javalibrarymanagement.data.model;
 
 public abstract class Member {
+
     private String memberID;
     private String memberName;
     private String memberSurname;
@@ -47,6 +48,14 @@ public abstract class Member {
     
     public int getMemberCurrentRight(){
         return avaibleRequestLimit;
+    }
+    
+    public int getMemberRight(){
+        return bookLimit;
+    }
+    
+    public void setAvaibleRequestLimit(int avaibleRequestLimit) {
+        this.avaibleRequestLimit = avaibleRequestLimit;
     }
     
 }

@@ -11,21 +11,28 @@ import javalibrarymanagement.data.SingletonDataWorks;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
 import javalibrarymanagement.data.model.*;
+import javalibrarymanagement.forms.memberForms.MemberIntro;
+import javalibrarymanagement.repository.searchRepo.allSearch;
+import javalibrarymanagement.utils.CenterScreen;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
 
-    static Login login = new Login();
     Statement state;
     ResultSet result;
+    String memberType;
+    Member enteredMember;  
     
     public Login() {
         initComponents();
+        CenterScreen.centerScreen(this);
         getContentPane().setBackground(new java.awt.Color(102, 102, 102));
         state = SingletonDataWorks.getStatement();
+        Locale.setDefault(Locale.ENGLISH);
     }
     
     @SuppressWarnings("unchecked")
@@ -117,6 +124,8 @@ public class Login extends javax.swing.JFrame {
         btnLogin.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         btnLogin.setForeground(new java.awt.Color(255, 255, 255));
         btnLogin.setText("Login");
+        btnLogin.setBorderPainted(false);
+        btnLogin.setFocusPainted(false);
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);
@@ -193,63 +202,30 @@ public class Login extends javax.swing.JFrame {
         String userName = etUsername.getText();
         String password = etPassword.getText();
         String userType = slctUserType.getSelectedItem().toString();
-        String memberType;
-        Member enteredMember;
-        try{
-            if(userType == "Academician"){
-                result = state.executeQuery("SELECT m.memberID, m.memberName, m.memberSurname, m.memberPhone, m.memberAdress, m.memberMail, m.memberUserName, m.memberPassword, d.departmantName, b.bookLimit, a.title, mrq.avaibleRequestCount FROM library_management_system.member m JOIN library_management_system.academician a ON m.memberID = a.memberID LEFT JOIN library_management_system.departmant d ON m.departmantID = d.departmantID LEFT JOIN library_management_system.book_limit b ON m.bookLimitID = b.bookLimitID LEFT JOIN library_management_system.member_request_limit mrq ON m.memberID = mrq.memberID WHERE m.memberUserName = '"+userName+"'  AND m.memberPassword = '"+password+"';");
-                if(result.next()){
-                enteredMember = new Academician(
-                            result.getString("memberID"),
-                            result.getString("memberName"),
-                            result.getString("memberSurname"),
-                            result.getString("memberPhone"),
-                            result.getString("memberAdress"),
-                            result.getString("memberMail"),
-                            result.getString("memberUsername"),
-                            result.getString("departmantName"),
-                            result.getInt("bookLimit"),
-                            result.getInt("avaibleRequestCount"),
-                            result.getString("title")
-                    );
-                System.out.println("Kullanıcı bulundu akademisyen");
-                new MemberIntro(enteredMember).setVisible(true);
-                login.setVisible(false);
-                login.dispose();
-                }else{
-                JOptionPane.showMessageDialog(new JFrame(), "Invalid username or password", "Login Error",JOptionPane.ERROR_MESSAGE);
-                etUsername.setText("");
-                etPassword.setText("");
-            }  
-            }else if(userType == "Student"){
-                result = state.executeQuery("SELECT m.memberID, m.memberName, m.memberSurname, m.memberPhone, m.memberAdress, m.memberMail, m.memberUserName, m.memberPassword, d.departmantName, b.bookLimit, s.grade, s.studentNumber, mrq.avaibleRequestCount FROM library_management_system.member m JOIN library_management_system.student s ON m.memberID = s.memberID LEFT JOIN library_management_system.departmant d ON m.departmantID = d.departmantID LEFT JOIN library_management_system.book_limit b ON m.bookLimitID = b.bookLimitID LEFT JOIN library_management_system.member_request_limit mrq ON m.memberID = mrq.memberID WHERE m.memberUserName = '"+userName+"'  AND m.memberPassword = '"+password+"';");
-                if(result.next()){
-                    enteredMember = new Student(
-                        result.getString("memberID"),
-                        result.getString("memberName"),
-                        result.getString("memberSurname"),
-                        result.getString("memberPhone"),
-                        result.getString("memberAdress"),
-                        result.getString("memberMail"),
-                        result.getString("memberUsername"),
-                        result.getString("departmantName"),
-                        result.getInt("bookLimit"),  
-                        result.getInt("avaibleRequestCount"),
-                        result.getInt("grade"),
-                        result.getString("studentNumber")
-                    );
-                    System.out.println("Kullanıcı bulundu öğrenci");
-                    new MemberIntro(enteredMember).setVisible(true);    
-                    login.setVisible(false);
-                    login.dispose();
-                }else{
-                JOptionPane.showMessageDialog(new JFrame(), "Invalid username or password", "Login Error",JOptionPane.ERROR_MESSAGE);
-                etUsername.setText("");
-                etPassword.setText("");
-                }           
-            }    
-        }catch(SQLException e){
-            System.out.println(e.getMessage());
+        if("Academician".equals(userType)){
+            enteredMember = allSearch.searchAcademician(userName, password);
+            if(enteredMember == null){
+               JOptionPane.showMessageDialog(this, "Invalid username or password","Login Error",JOptionPane.ERROR_MESSAGE);
+               etUsername.setText("");
+               etPassword.setText("");
+            }else{
+               new MemberIntro(enteredMember).setVisible(true);
+                this.setVisible(false);
+                this.dispose(); 
+            }
+        }else if("Student".equals(userType)){
+            enteredMember = allSearch.searchUser(userName, password);
+            if(enteredMember == null){
+               JOptionPane.showMessageDialog(this, "Invalid username or password","Login Error",JOptionPane.ERROR_MESSAGE);
+               etUsername.setText("");
+               etPassword.setText("");
+            }else{
+               new MemberIntro(enteredMember).setVisible(true);
+                this.setVisible(false);
+                this.dispose(); 
+            }
+        }else if("Librarian".equals(userType)){
+         // TODO
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
@@ -257,8 +233,8 @@ public class Login extends javax.swing.JFrame {
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                login.setVisible(true);
+            public void run() {       
+            new Login().setVisible(true);
             }
         });
     }

@@ -10,4 +10,17 @@ public class Academician extends Member{
         this.title = title;
     }
     
+    @Override
+    public void printPersonalInfo() {
+        super.printPersonalInfo();
+        System.out.println("\nTitle: "+title);
+    }
+
+    @Override
+    public String getUserName() {
+        return title+". "+super.getUserName();
+    }
+    
+    
+    
 }
