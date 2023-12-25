@@ -1,30 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package javalibrarymanagement.forms.memberForms;
 
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import javalibrarymanagement.data.LibraryService;
 import javalibrarymanagement.data.model.Annoucement;
 import javalibrarymanagement.data.model.Member;
-import javalibrarymanagement.repository.getRepo.allGets;
 import javalibrarymanagement.utils.CenterScreen;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author erenm
- */
 public class AnnoucementsForMember extends javax.swing.JFrame {
 
     
     private final Member currentMember;
-    private DefaultTableModel model;
+    private final DefaultTableModel model;
     private final DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-    private ArrayList<Annoucement> allAnnoucements = allGets.getAllAnnoucements();
+    private final LibraryService service = new LibraryService();
+    private final ArrayList<Annoucement> allAnnoucements = service.getAllAnnoucements();
     
     public AnnoucementsForMember(Member member) {
         initComponents();

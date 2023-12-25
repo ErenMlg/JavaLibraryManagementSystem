@@ -2,13 +2,10 @@
 package javalibrarymanagement.forms.memberForms;
 
 import java.awt.event.WindowEvent;
-import java.sql.Statement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
-import javalibrarymanagement.data.SingletonDataWorks;
+import javalibrarymanagement.data.LibraryService;
 import javalibrarymanagement.data.model.*;
 import javalibrarymanagement.forms.Login;
-import javalibrarymanagement.repository.getRepo.allGets;
 import javalibrarymanagement.utils.CenterScreen;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -18,8 +15,9 @@ public class MemberIntro extends javax.swing.JFrame {
     
     private final Member currentMember;
     private final DefaultTableModel model;
-    private ArrayList<BookIssue> allIssues = new ArrayList<BookIssue>();
+    private ArrayList<BookIssue> allIssues = new ArrayList<>();
     private final DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+    private final LibraryService service = new LibraryService();
 
     public MemberIntro(Member member) {
         initComponents();
@@ -31,7 +29,7 @@ public class MemberIntro extends javax.swing.JFrame {
         tblCurrentBooks.setDefaultRenderer(int.class, centerRenderer);
         txtWelcome.setText(currentMember.getUserName());
         model = (DefaultTableModel)tblCurrentBooks.getModel();
-        allIssues = allGets.getMyIssues(currentMember);
+        allIssues = service.getMyIssues(currentMember);
         for(BookIssue issue:allIssues){
             Object[] row = {
                 issue.getISBN(),
@@ -276,7 +274,7 @@ public class MemberIntro extends javax.swing.JFrame {
     }//GEN-LAST:event_btnChangeUserActionPerformed
 
     private void btnShowProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowProfileActionPerformed
-        new BookRequestForMember(currentMember).setVisible(true);
+        new BookRequestsForMember(currentMember).setVisible(true);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnShowProfileActionPerformed

@@ -3,11 +3,9 @@ package javalibrarymanagement.forms.memberForms;
 
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import javalibrarymanagement.data.LibraryService;
 import javalibrarymanagement.data.model.*;
-import javalibrarymanagement.repository.getRepo.allGets;
-import javalibrarymanagement.repository.searchRepo.*;
 import javalibrarymanagement.utils.CenterScreen;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -18,13 +16,9 @@ public class ShowBooksForMember extends javax.swing.JFrame {
     private final Member currentMember;
     private final DefaultTableModel model;
     private final DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-    private ArrayList<Book> bookList = allGets.getAllBooks();
-    private final ArrayList<Categories> allCategories = allGets.getAllCategories();
-    private final AuthorSearch authorSearch = new AuthorSearch();
-    private final CategorySearch categorySearch = new CategorySearch();
-    private final ISBNSearch isbnSearch = new ISBNSearch();
-    private final NameSearch nameSearch = new NameSearch();
-    private final PublisherSearch publisherSearch = new PublisherSearch();
+    private final LibraryService service = new LibraryService();
+    private ArrayList<Book> bookList = service.getAllBooks();
+    private final ArrayList<Categories> allCategories = service.getAllCategories();
    
     public ShowBooksForMember(Member member) {
         initComponents();
@@ -322,7 +316,7 @@ public class ShowBooksForMember extends javax.swing.JFrame {
         etPublisher.setText("");
         etCategory.setSelectedIndex(0);
         etName.setText("");
-        bookList = isbnSearch.search(etISBN.getText());
+        bookList = service.searchWithISBN(etISBN.getText());
         model.setRowCount(0);
         addBooksToTable(bookList);
     }//GEN-LAST:event_etISBNKeyReleased
@@ -332,7 +326,7 @@ public class ShowBooksForMember extends javax.swing.JFrame {
         etISBN.setText("");
         etCategory.setSelectedIndex(0);
         etName.setText("");
-        bookList = authorSearch.search(etAuthor.getText());
+        bookList = service.searchWithAuthor(etAuthor.getText());
         model.setRowCount(0);
         addBooksToTable(bookList);
     }//GEN-LAST:event_etAuthorKeyReleased
@@ -342,7 +336,7 @@ public class ShowBooksForMember extends javax.swing.JFrame {
         etISBN.setText("");
         etCategory.setSelectedIndex(0);
         etName.setText("");
-        bookList = publisherSearch.search(etPublisher.getText());
+        bookList = service.searchWithPublisher(etPublisher.getText());
         model.setRowCount(0);
         addBooksToTable(bookList);
     }//GEN-LAST:event_etPublisherKeyReleased
@@ -352,20 +346,20 @@ public class ShowBooksForMember extends javax.swing.JFrame {
         etISBN.setText("");
         etCategory.setSelectedIndex(0);
         etPublisher.setText("");
-        bookList = nameSearch.search(etName.getText());
+        bookList = service.searchWithName(etName.getText());
         model.setRowCount(0);
         addBooksToTable(bookList);
     }//GEN-LAST:event_etNameKeyReleased
 
     private void etCategoryİtemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_etCategoryİtemStateChanged
         if(etCategory.getSelectedItem() == "Select For Search"){          
-            bookList = categorySearch.search("");
+            bookList = service.searchWithCategory("");
         }else{
             etAuthor.setText("");
             etISBN.setText("");
             etName.setText("");
             etPublisher.setText("");
-            bookList = categorySearch.search(evt.getItem().toString());
+            bookList = service.searchWithCategory(evt.getItem().toString());
         }
         model.setRowCount(0);
         addBooksToTable(bookList);
@@ -376,7 +370,7 @@ public class ShowBooksForMember extends javax.swing.JFrame {
       if(selectedRow != -1){
           if(currentMember.getMemberCurrentRight() > 0){
               if(tblBooks.getValueAt(selectedRow, 8).toString().equals("Available")){
-                  if(allGets.getCountOfBorrowedBook(currentMember, tblBooks.getValueAt(selectedRow, 0).toString()) == 0){
+                  if(service.isSelectedBookRequested(currentMember, tblBooks.getValueAt(selectedRow, 0).toString())){
                       Book newBook = new Book(
                       (String)tblBooks.getValueAt(selectedRow, 0),
                       (String)tblBooks.getValueAt(selectedRow, 1),

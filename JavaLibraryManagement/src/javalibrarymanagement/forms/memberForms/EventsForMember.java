@@ -6,9 +6,9 @@ package javalibrarymanagement.forms.memberForms;
 
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import javalibrarymanagement.data.LibraryService;
 import javalibrarymanagement.data.model.Event;
 import javalibrarymanagement.data.model.Member;
-import javalibrarymanagement.repository.getRepo.allGets;
 import javalibrarymanagement.utils.CenterScreen;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -19,7 +19,8 @@ public class EventsForMember extends javax.swing.JFrame {
     private final Member currentMember;
     private DefaultTableModel model;
     private final DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-    private ArrayList<Event> allEvents = allGets.getAllEvents();
+    private final LibraryService service = new LibraryService();
+    private final ArrayList<Event> allEvents = service.getAllEvents();
     
     public EventsForMember(Member member) {
         initComponents();

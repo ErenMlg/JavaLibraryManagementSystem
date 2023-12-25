@@ -1,23 +1,18 @@
 
 package javalibrarymanagement.forms.memberForms;
 
-import com.toedter.calendar.JDateChooser;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import javalibrarymanagement.data.LibraryService;
 import javalibrarymanagement.data.model.*;
-import javalibrarymanagement.repository.createRepo.allCreates;
 import javalibrarymanagement.utils.CenterScreen;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 public class BorrowBook extends javax.swing.JFrame {
 
     private final Member currentMember;
     private final Book currentBook;
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private final LibraryService service = new LibraryService();
     
     public BorrowBook(Book book, Member member) {
         initComponents();
@@ -299,7 +294,7 @@ public class BorrowBook extends javax.swing.JFrame {
 
     private void btnCreateRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateRequestActionPerformed
         if(etDate.getDate() != null){
-            Boolean isFailed = allCreates.createBorrowRequest(currentBook.getBookISBN(), currentMember, sdf.format(etDate.getDate()));
+            Boolean isFailed = service.createBorrowRequest(currentBook.getBookISBN(), currentMember, sdf.format(etDate.getDate()));
             if(isFailed){
                 JOptionPane.showMessageDialog(this, "Something was wrong", "Error.",JOptionPane.ERROR_MESSAGE);
             }else{

@@ -3,35 +3,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package javalibrarymanagement.forms;
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import javalibrarymanagement.data.SingletonDataWorks;
-import java.sql.Statement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Locale;
+import javalibrarymanagement.data.LibraryService;
 import javalibrarymanagement.data.model.*;
 import javalibrarymanagement.forms.memberForms.MemberIntro;
-import javalibrarymanagement.repository.searchRepo.allSearch;
 import javalibrarymanagement.utils.CenterScreen;
-
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
 
-    Statement state;
-    ResultSet result;
-    String memberType;
-    Member enteredMember;  
+    private String memberType;
+    private Member enteredMember;  
+    private final LibraryService service = new LibraryService();
+    
     
     public Login() {
         initComponents();
         CenterScreen.centerScreen(this);
         getContentPane().setBackground(new java.awt.Color(102, 102, 102));
-        state = SingletonDataWorks.getStatement();
         Locale.setDefault(Locale.ENGLISH);
     }
     
@@ -203,7 +192,7 @@ public class Login extends javax.swing.JFrame {
         String password = etPassword.getText();
         String userType = slctUserType.getSelectedItem().toString();
         if("Academician".equals(userType)){
-            enteredMember = allSearch.searchAcademician(userName, password);
+            enteredMember = service.searchAcademician(userName, password);
             if(enteredMember == null){
                JOptionPane.showMessageDialog(this, "Invalid username or password","Login Error",JOptionPane.ERROR_MESSAGE);
                etUsername.setText("");
@@ -214,7 +203,7 @@ public class Login extends javax.swing.JFrame {
                 this.dispose(); 
             }
         }else if("Student".equals(userType)){
-            enteredMember = allSearch.searchUser(userName, password);
+            enteredMember = service.searchStudent(userName, password);
             if(enteredMember == null){
                JOptionPane.showMessageDialog(this, "Invalid username or password","Login Error",JOptionPane.ERROR_MESSAGE);
                etUsername.setText("");
