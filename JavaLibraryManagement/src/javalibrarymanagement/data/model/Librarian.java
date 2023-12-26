@@ -2,21 +2,27 @@ package javalibrarymanagement.data.model;
 
 public class Librarian {
 
-    private int memberID;
-    private String memberName;
-    private String memberSurname;
-    private String memberPhone;
-    private String memberAddress;
-    private String memberMail;
-    private String memberUsername;
+    private int librarianID;
+    private String librarianName;
+    private String librarianSurname;
+    private String librarianPhone;
+    private String librarianAddress;
+    private String librarianMail;
+    private String librarianUsername;
 
-    public Librarian(int memberID, String memberName, String memberSurname, String memberPhone, String memberAddress, String memberMail, String memberUsername) {
-        this.memberID = memberID;
-        this.memberName = memberName;
-        this.memberSurname = memberSurname;
-        this.memberPhone = memberPhone;
-        this.memberAddress = memberAddress;
-        this.memberMail = memberMail;
-        this.memberUsername = memberUsername;
+    public Librarian(int librarianID, String librarianName, String librarianSurname, String librarianPhone, String librarianAddress, String librarianMail, String librarianUsername) {
+        this.librarianID = librarianID;
+        this.librarianName = librarianName;
+        this.librarianSurname = librarianSurname;
+        this.librarianPhone = librarianPhone;
+        this.librarianAddress = librarianAddress;
+        this.librarianMail = librarianMail;
+        this.librarianUsername = librarianUsername;
     }
+    
+    public String getLibrarianName(){
+        return librarianName+" "+librarianSurname;
+    }
+
+
 }

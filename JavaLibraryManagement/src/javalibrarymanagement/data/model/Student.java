@@ -7,10 +7,11 @@ public class Student extends Member{
     private String studentNumber;
 
     public Student(String memberID, String memberName, String memberSurname, String memberPhone, String memberAddress, String memberMail, String memberUsername, String departmantName, int bookLimit, int avaibleRequestLimit, int grade, String studentNumber) {
-        super(memberID, memberName, memberSurname, memberPhone, memberAddress, memberMail, memberUsername, departmantName, bookLimit, avaibleRequestLimit);
+        super(memberID, memberName, memberSurname, memberPhone, memberAddress, memberMail, memberUsername, departmantName, bookLimit, avaibleRequestLimit, "Student");
         this.grade = grade;
         this.studentNumber = studentNumber;
     }
+
     
 
     @Override

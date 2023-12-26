@@ -5,7 +5,6 @@
 package javalibrarymanagement.patterns.searchStrategy;
 
 import java.util.ArrayList;
-import java.util.List;
 import javalibrarymanagement.data.model.Book;
 
 public interface SearchStrategy {

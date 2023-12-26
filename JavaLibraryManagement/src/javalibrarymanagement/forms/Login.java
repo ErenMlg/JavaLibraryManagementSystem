@@ -6,14 +6,15 @@ package javalibrarymanagement.forms;
 import java.util.Locale;
 import javalibrarymanagement.data.LibraryService;
 import javalibrarymanagement.data.model.*;
+import javalibrarymanagement.forms.librarianForms.LibrarianIntro;
 import javalibrarymanagement.forms.memberForms.MemberIntro;
 import javalibrarymanagement.utils.CenterScreen;
 import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
 
-    private String memberType;
-    private Member enteredMember;  
+    private Member enteredMember;
+    private Librarian enteredLibrarian;
     private final LibraryService service = new LibraryService();
     
     
@@ -125,7 +126,7 @@ public class Login extends javax.swing.JFrame {
         jLabel4.setText("User Type");
 
         slctUserType.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        slctUserType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Student", "Academician", "Library" }));
+        slctUserType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Student", "Academician", "Librarian" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -214,17 +215,23 @@ public class Login extends javax.swing.JFrame {
                 this.dispose(); 
             }
         }else if("Librarian".equals(userType)){
-         // TODO
+            enteredLibrarian = service.searchLibrarian(userName, password);
+            if(enteredLibrarian == null){
+               JOptionPane.showMessageDialog(this, "Invalid username or password","Login Error",JOptionPane.ERROR_MESSAGE);
+               etUsername.setText("");
+               etPassword.setText("");
+            }else{
+               new LibrarianIntro(enteredLibrarian).setVisible(true);
+                this.setVisible(false);
+                this.dispose(); 
+            }
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
 
     public static void main(String args[]) {
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {       
+        java.awt.EventQueue.invokeLater(() -> {       
             new Login().setVisible(true);
-            }
         });
     }
 

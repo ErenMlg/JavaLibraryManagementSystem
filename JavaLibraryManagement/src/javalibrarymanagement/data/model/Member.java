@@ -12,8 +12,9 @@ public abstract class Member {
     private String departmantName;
     private int bookLimit;
     private int avaibleRequestLimit;
+    private String memberType;
     
-    public Member(String memberID, String memberName, String memberSurname, String memberPhone, String memberAddress, String memberMail, String memberUsername, String departmantName, int bookLimit, int avaibleRequestLimit) {        
+    public Member(String memberID, String memberName, String memberSurname, String memberPhone, String memberAddress, String memberMail, String memberUsername, String departmantName, int bookLimit, int avaibleRequestLimit, String memberType) {        
         this.memberID = memberID;
         this.memberName = memberName;
         this.memberSurname = memberSurname;
@@ -24,6 +25,7 @@ public abstract class Member {
         this.departmantName = departmantName;
         this.bookLimit = bookLimit;
         this.avaibleRequestLimit = avaibleRequestLimit;
+        this.memberType = memberType;
     }
     
     public void printPersonalInfo(){
@@ -58,4 +60,35 @@ public abstract class Member {
         this.avaibleRequestLimit = avaibleRequestLimit;
     }
     
+    public String getMemberName(){
+        return memberName+" "+memberSurname;
+    }
+    
+        public String getMemberPhone() {
+        return memberPhone;
+    }
+
+    public String getMemberAddress() {
+        return memberAddress;
+    }
+
+    public String getMemberMail() {
+        return memberMail;
+    }
+
+    public String getMemberUsername() {
+        return memberUsername;
+    }
+
+    public String getDepartmantName() {
+        return departmantName;
+    }
+
+    public int getAvaibleRequestLimit() {
+        return avaibleRequestLimit;
+    }
+
+    public String getMemberType() {
+        return memberType;
+    }
 }

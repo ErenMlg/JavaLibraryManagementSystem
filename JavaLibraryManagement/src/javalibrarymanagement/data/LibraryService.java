@@ -9,6 +9,7 @@ import javalibrarymanagement.data.model.BookIssue;
 import javalibrarymanagement.data.model.BorrowRequest;
 import javalibrarymanagement.data.model.Categories;
 import javalibrarymanagement.data.model.Event;
+import javalibrarymanagement.data.model.Librarian;
 import javalibrarymanagement.data.model.Member;
 
 public class LibraryService {
@@ -19,6 +20,7 @@ public class LibraryService {
     private final CategoryDao categoryDao;
     private final EventDao eventDao;
     private final MemberDao memberDao;
+    private final LibrarianDao librarianDao;
 
     public LibraryService() {
         bookDao = BookDaoImpl.getInstance();
@@ -28,13 +30,13 @@ public class LibraryService {
         categoryDao = CategoryDaoImpl.getInstance();
         eventDao = EventDaoImpl.getInstance();
         memberDao = MemberDaoImpl.getInstance();
+        librarianDao = LibrarianDaoImpl.getInstance();
     }
     
     public ArrayList<Annoucement> getAllAnnoucements(){
         return annoucementDao.getAllAnnoucements();
     }
     
-        
     public ArrayList<Book> getAllBooks(){
         return bookDao.getAllBooks();
     }
@@ -88,6 +90,10 @@ public class LibraryService {
         return eventDao.getAllEvents();
     }
     
+    public ArrayList<Member> getAllMembers(){
+        return memberDao.getAllMembers();
+    }
+    
     public Member searchAcademician(String username, String password){
         return memberDao.searchAcademician(username, password);
     }
@@ -96,5 +102,18 @@ public class LibraryService {
         return memberDao.searchStudent(username, password);
     }
     
+    public ArrayList<Member> searchMembersWithName(String searchKeyword){
+        return memberDao.searchMembersWithName(searchKeyword);
+    }
+
+    public ArrayList<Member> searchMembersWithID(String searchKeyword){
+        return memberDao.searchMembersWithID(searchKeyword);
+    }
+    
+     public Librarian searchLibrarian(String username, String password){
+         return librarianDao.searchLibrarian(username, password);
+     }
+    
+     
     
 }
