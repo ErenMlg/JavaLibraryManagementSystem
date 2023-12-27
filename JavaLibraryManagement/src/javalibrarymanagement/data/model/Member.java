@@ -2,6 +2,14 @@ package javalibrarymanagement.data.model;
 
 public abstract class Member {
 
+    public String getMemberSurname() {
+        return memberSurname;
+    }
+    
+        public String getMemberFirstName() {
+        return memberName;
+    }
+
     private String memberID;
     private String memberName;
     private String memberSurname;

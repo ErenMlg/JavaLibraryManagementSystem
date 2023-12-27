@@ -27,7 +27,7 @@ public class CategoryDaoImpl implements CategoryDao{
     
     @Override
     public ArrayList<Categories> getAllCategories() {
-        ArrayList<Categories> categoryList = new ArrayList<Categories>();
+        ArrayList<Categories> categoryList = new ArrayList<>();
         try{
             results = statement.executeQuery("SELECT * FROM library_management_system.category;");
             while(results.next()){

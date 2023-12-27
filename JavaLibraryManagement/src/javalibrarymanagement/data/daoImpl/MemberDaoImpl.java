@@ -98,7 +98,7 @@ public class MemberDaoImpl implements MemberDao{
                         results.getString("memberPhone"),
                         results.getString("memberAdress"),
                         results.getString("memberMail"),
-                        results.getString("memberUsername"),
+                        results.getString("memberUserName"),
                         results.getString("departmantName"),
                         results.getInt("bookLimit"),  
                         results.getInt("avaibleRequestCount"),
@@ -112,7 +112,7 @@ public class MemberDaoImpl implements MemberDao{
                         results.getString("memberPhone"),
                         results.getString("memberAdress"),
                         results.getString("memberMail"),
-                        results.getString("memberUsername"),
+                        results.getString("memberUserName"),
                         results.getString("departmantName"),
                         results.getInt("bookLimit"),  
                         results.getInt("avaibleRequestCount"),
@@ -211,6 +211,125 @@ public class MemberDaoImpl implements MemberDao{
             System.err.println(e);
         }
         return memberList;
+    }
+
+    @Override
+    public Boolean addMember(String memberID, String memberName, String memberSurname, String memberPhone, String memberAddress, String memberMail, String memberUsername, String memberPassword, int bookLimit, int departmantID, String studentNumber, int grade, String title, String userType) {
+        Boolean result=true;
+        try{
+            result = statement.execute("INSERT INTO `library_management_system`.`member` (`memberID`, `memberName`,`memberSurname`,`memberPhone`,`memberMail`,`memberUserName`,`memberPassword`,`memberAdress`,`bookLimitID`,`departmantID`) VALUES ('"+memberID+"', '"+memberName+"','"+memberSurname+"', '"+memberPhone+"','"+memberMail+"', '"+memberUsername+"','"+memberPassword+"', '"+memberAddress+"','"+bookLimit+"', '"+departmantID+"');");       
+            System.err.println("in "+result);
+            if(!result){
+                if("Academician".equals(userType)){
+                    result = addAcademician(memberID, title);
+                }else if("Student".equals(userType)){
+                    result = addStudent(memberID, studentNumber, grade);
+                }
+                if(!result){
+                    switch(bookLimit){
+                        case 1 -> result = statement.execute("INSERT INTO `library_management_system`.`member_request_limit` (`memberID`, `currentRequestCount`, `avaibleRequestCount`) VALUES ('"+memberID+"', '"+0+"', '"+5+"');");
+                        case 2 -> result = statement.execute("INSERT INTO `library_management_system`.`member_request_limit` (`memberID`, `currentRequestCount`, `avaibleRequestCount`) VALUES ('"+memberID+"', '"+0+"', '"+3+"');");
+                        default -> {}
+                    }
+                }
+            }
+        }catch(SQLException e){
+            System.err.println(e);
+        }
+        return result;
+    }
+
+    @Override
+    public Boolean addAcademician(String memberID, String title) {
+        Boolean result=false;
+        try{
+            result = statement.execute("INSERT INTO `library_management_system`.`academician` (`memberID`,`title`) VALUES ('"+memberID+"','"+title+"')");
+        }catch(SQLException e){
+            System.err.println(e);
+        }
+        return result;
+    }
+
+    @Override
+    public Boolean addStudent(String memberID, String studentNumber, int grade) {
+        Boolean result=false;
+        try{
+            result = statement.execute("INSERT INTO `library_management_system`.`student` (`memberID`,`studentNumber`,`grade`) VALUES ('"+memberID+"','"+studentNumber+"','"+grade+"')");
+        }catch(SQLException e){
+            System.err.println(e);
+        }
+        return result;
+    }
+
+    @Override
+    public Boolean updateMember(String memberID, String memberName, String memberSurname, String memberPhone, String memberAddress, String memberMail, String memberUsername, int departmantID, String studentNumber, int grade, String title, String userType) {
+        Boolean result=false;
+        try{
+            result = statement.execute("UPDATE `library_management_system`.`member` SET `memberName` = '"+memberName+"', `memberSurname` = '"+memberSurname+"', `memberPhone` = '"+memberPhone+"', `memberAdress` = '"+memberAddress+"', `memberMail` = '"+memberMail+"', `memberUserName` = '"+memberUsername+"', `departmantID` = '"+departmantID+"' WHERE (`memberID` = '"+memberID+"');");
+            if(!result){
+                if("Academician".equals(userType)){
+                    result = updateAcademician(memberID, title);
+                }else if("Student".equals(userType)){
+                    result = updateStudent(memberID, studentNumber, grade);
+                }
+            }        
+        }catch(SQLException e){
+            System.err.println(e);
+        }
+        return result;
+    }
+
+    @Override
+    public Boolean updateAcademician(String memberID, String title) {
+        Boolean result=false;
+        try{
+            result = statement.execute("UPDATE `library_management_system`.`academician` SET `title` = '"+title+"' WHERE (`memberID` = '"+memberID+"');");
+        }catch(SQLException e){
+            System.err.println(e);
+        }
+        return result;
+    }
+
+    @Override
+    public Boolean updateStudent(String memberID, String studentNumber, int grade) {
+        Boolean result=false;
+        try{
+            result = statement.execute("UPDATE `library_management_system`.`student` SET `grade` = '"+grade+"', `studentNumber` = '"+studentNumber+"' WHERE (`memberID` = '"+memberID+"');");
+        }catch(SQLException e){
+            System.err.println(e);
+        }
+        return result;
+    }
+
+    @Override
+    public Boolean deleteMember(String memberID, String memberType) {
+        Boolean result=false;
+        try{
+           if("Academician".equals(memberType)){
+                result = statement.execute("DELETE FROM `library_management_system`.`academician` WHERE (`memberID` = '"+memberID+"');");
+            }else if("Student".equals(memberType)){
+                result = statement.execute("DELETE FROM `library_management_system`.`student` WHERE (`memberID` = '"+memberID+"');");
+            }
+           if(!result){
+               if(!statement.execute("DELETE FROM `library_management_system`.`book_request` WHERE (`memberID` = '"+memberID+"+');")){
+               ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM `library_management_system`.`book_issue` WHERE (`memberID` = '"+memberID+"' AND `issueStatus` = 0);");
+               rs.next();
+               if(rs.getInt(1)==0){
+                   if(!statement.execute("DELETE FROM `library_management_system`.`book_issue` WHERE (`memberID` = '"+memberID+"' AND `issueStatus` = 1);")){
+                       if(!statement.execute("DELETE FROM `library_management_system`.`member_request_limit` WHERE (`memberID` = '"+memberID+"');")){
+                           return true;
+                       }
+                   }
+               }else{
+                   return false;
+               }
+            }
+           }
+            result = statement.execute("");
+        }catch(SQLException e){
+            System.err.println(e);
+        }
+        return result;
     }
 
     

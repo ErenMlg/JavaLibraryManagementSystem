@@ -3,11 +3,14 @@ package javalibrarymanagement.forms.librarianForms;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import javalibrarymanagement.data.LibraryService;
+import javalibrarymanagement.data.model.Academician;
 import javalibrarymanagement.data.model.Book;
 import javalibrarymanagement.data.model.Librarian;
 import javalibrarymanagement.data.model.Member;
+import javalibrarymanagement.data.model.Student;
 import javalibrarymanagement.utils.CenterScreen;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -59,6 +62,7 @@ public class UserWorksLibrarian extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(1500, 600));
 
         jPanel1.setBackground(new java.awt.Color(204, 153, 0));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1500, 530));
         jPanel1.setLayout(null);
 
         jPanel2.setBackground(new java.awt.Color(0, 102, 102));
@@ -292,7 +296,7 @@ public class UserWorksLibrarian extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -313,15 +317,43 @@ public class UserWorksLibrarian extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        
+        new AddUserLibrarian(currentLibrarian).setVisible(true);
+        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        
+        int selectedRow = tblMembers.getSelectedRow();
+        Boolean result = false;
+        String memberID = tblMembers.getValueAt(selectedRow, 0).toString();
+        if(tblMembers.getValueAt(selectedRow, 8).toString().equals("Academician")){
+            result=service.deleteMember(memberID, "Academician");
+        }else if(tblMembers.getValueAt(selectedRow, 8).toString().equals("Student")){
+            result=service.deleteMember(memberID, "Student");
+        }
+        if(result){
+            JOptionPane.showMessageDialog(this, "Member successfully deleted.", "Success",JOptionPane.INFORMATION_MESSAGE);
+            model.setRowCount(0);
+            memberList = service.getAllMembers();
+            addMembersToTable(memberList);
+        }else{
+            JOptionPane.showMessageDialog(this, "Member have borrowed books first take back the books", "Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        
+        int selectedRow = tblMembers.getSelectedRow();
+        ArrayList<Member> member = service.searchMembersWithID(tblMembers.getValueAt(selectedRow, 0).toString());
+        if(tblMembers.getValueAt(selectedRow, 8).toString().equals("Academician")){
+            new UpdateAcademicianLibrarian(currentLibrarian, (Academician)member.get(0)).setVisible(true);
+            this.setVisible(false);
+            this.dispose();
+        }else if(tblMembers.getValueAt(selectedRow, 8).toString().equals("Student")){
+            new UpdateStudentLibrarian(currentLibrarian, (Student)member.get(0)).setVisible(true);
+            this.setVisible(false);
+            this.dispose();
+        }
+
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void etIDKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_etIDKeyReleased
@@ -345,7 +377,7 @@ public class UserWorksLibrarian extends javax.swing.JFrame {
                 searchedMember.getMemberPhone(),
                 searchedMember.getMemberAddress(),
                 searchedMember.getMemberMail(),
-                searchedMember.getUserName(),
+                searchedMember.getMemberUsername(),
                 searchedMember.getDepartmantName(),
                 searchedMember.getMemberCurrentRight(),
                 searchedMember.getMemberType()

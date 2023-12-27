@@ -2,6 +2,14 @@ package javalibrarymanagement.data.model;
 
 
 public class Student extends Member{
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public String getStudentNumber() {
+        return studentNumber;
+    }
     
     private int grade;
     private String studentNumber;

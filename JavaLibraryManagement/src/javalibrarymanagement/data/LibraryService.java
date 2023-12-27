@@ -8,6 +8,7 @@ import javalibrarymanagement.data.model.Book;
 import javalibrarymanagement.data.model.BookIssue;
 import javalibrarymanagement.data.model.BorrowRequest;
 import javalibrarymanagement.data.model.Categories;
+import javalibrarymanagement.data.model.Departmant;
 import javalibrarymanagement.data.model.Event;
 import javalibrarymanagement.data.model.Librarian;
 import javalibrarymanagement.data.model.Member;
@@ -21,7 +22,8 @@ public class LibraryService {
     private final EventDao eventDao;
     private final MemberDao memberDao;
     private final LibrarianDao librarianDao;
-
+    private final DepartmantDao departmantDao;
+    
     public LibraryService() {
         bookDao = BookDaoImpl.getInstance();
         annoucementDao = AnnoucementDaoImpl.getInstance();
@@ -31,6 +33,7 @@ public class LibraryService {
         eventDao = EventDaoImpl.getInstance();
         memberDao = MemberDaoImpl.getInstance();
         librarianDao = LibrarianDaoImpl.getInstance();
+        departmantDao = DepartmantDaoImpl.getInstance();
     }
     
     public ArrayList<Annoucement> getAllAnnoucements(){
@@ -86,6 +89,10 @@ public class LibraryService {
         return categoryDao.getAllCategories();
     }
     
+    public ArrayList<Departmant> getAllDepartmants(){
+        return departmantDao.getAllDepartmants();
+    }
+    
     public ArrayList<Event> getAllEvents(){
         return eventDao.getAllEvents();
     }
@@ -108,6 +115,34 @@ public class LibraryService {
 
     public ArrayList<Member> searchMembersWithID(String searchKeyword){
         return memberDao.searchMembersWithID(searchKeyword);
+    }
+    
+    public Boolean addMember(String memberID, String memberName, String memberSurname, String memberPhone, String memberAddress, String memberMail, String memberUsername, String memberPassword, int bookLimit, int departmantID, String studentNumber, int grade, String title, String userType) {
+        return memberDao.addMember(memberID, memberName, memberSurname, memberPhone, memberAddress, memberMail, memberUsername, memberPassword, bookLimit, departmantID, studentNumber, grade, title, userType); 
+    }
+    
+    public Boolean addAcademician(String memberID, String title){
+        return memberDao.addAcademician(memberID, title);
+    }
+
+    public Boolean addStudent(String memberID, String studentNumber, int grade){
+        return memberDao.addStudent(memberID, studentNumber, grade);
+    }
+    
+    public Boolean updateMember(String memberID, String memberName, String memberSurname, String memberPhone, String memberAddress, String memberMail, String memberUsername, int departmantID, String studentNumber, int grade, String title, String userType){
+        return memberDao.updateMember(memberID, memberName, memberSurname, memberPhone, memberAddress, memberMail, memberUsername, departmantID, studentNumber, grade, title, userType);
+    }
+    
+    public Boolean updateAcademician(String memberID, String title){
+        return memberDao.updateAcademician(memberID, title);
+    }
+    
+    public Boolean updateStudent(String memberID, String studentNumber, int grade){
+        return memberDao.updateStudent(memberID, studentNumber, grade);
+    }
+    
+    public Boolean deleteMember(String memberID, String memberType){
+        return memberDao.deleteMember(memberID, memberType);
     }
     
      public Librarian searchLibrarian(String username, String password){
