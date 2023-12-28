@@ -15,7 +15,7 @@ public class Login extends javax.swing.JFrame {
 
     private Member enteredMember;
     private Librarian enteredLibrarian;
-    private final LibraryService service = new LibraryService();
+    private final LibraryService service = LibraryService.getInstance();
     
     
     public Login() {

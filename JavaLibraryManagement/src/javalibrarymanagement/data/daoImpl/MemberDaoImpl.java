@@ -305,26 +305,26 @@ public class MemberDaoImpl implements MemberDao{
     public Boolean deleteMember(String memberID, String memberType) {
         Boolean result=false;
         try{
-           if("Academician".equals(memberType)){
-                result = statement.execute("DELETE FROM `library_management_system`.`academician` WHERE (`memberID` = '"+memberID+"');");
-            }else if("Student".equals(memberType)){
-                result = statement.execute("DELETE FROM `library_management_system`.`student` WHERE (`memberID` = '"+memberID+"');");
+            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM `library_management_system`.`book_issue` WHERE (`memberID` = '"+memberID+"' AND `issueStatus` = 0);");
+            rs.next();
+            if(rs.getInt(1)==0){
+                if("Academician".equals(memberType)){
+                    result = statement.execute("DELETE FROM `library_management_system`.`academician` WHERE (`memberID` = '"+memberID+"');");
+                }else if("Student".equals(memberType)){
+                    result = statement.execute("DELETE FROM `library_management_system`.`student` WHERE (`memberID` = '"+memberID+"');");
+                }
+                if(!result){
+                    if(!statement.execute("DELETE FROM `library_management_system`.`book_request` WHERE (`memberID` = '"+memberID+"+');")){
+                        if(!statement.execute("DELETE FROM `library_management_system`.`book_issue` WHERE (`memberID` = '"+memberID+"' AND `issueStatus` = 1);")){
+                            if(!statement.execute("DELETE FROM `library_management_system`.`member_request_limit` WHERE (`memberID` = '"+memberID+"');")){
+                                return !statement.execute("DELETE FROM `library_management_system`.`member` WHERE (`memberID` = '"+memberID+"');");
+                            }
+                        }
+                    }
+                }   
+            }else{
+                return false;
             }
-           if(!result){
-               if(!statement.execute("DELETE FROM `library_management_system`.`book_request` WHERE (`memberID` = '"+memberID+"+');")){
-               ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM `library_management_system`.`book_issue` WHERE (`memberID` = '"+memberID+"' AND `issueStatus` = 0);");
-               rs.next();
-               if(rs.getInt(1)==0){
-                   if(!statement.execute("DELETE FROM `library_management_system`.`book_issue` WHERE (`memberID` = '"+memberID+"' AND `issueStatus` = 1);")){
-                       if(!statement.execute("DELETE FROM `library_management_system`.`member_request_limit` WHERE (`memberID` = '"+memberID+"');")){
-                           return true;
-                       }
-                   }
-               }else{
-                   return false;
-               }
-            }
-           }
             result = statement.execute("");
         }catch(SQLException e){
             System.err.println(e);

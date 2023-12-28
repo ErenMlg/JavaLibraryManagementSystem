@@ -1,6 +1,11 @@
 package javalibrarymanagement.data.model;
 
+
 public class Book {
+
+    public int getCopy() {
+        return copy;
+    }
     private String bookISBN;
     private String bookName;
     private String author;
@@ -11,8 +16,9 @@ public class Book {
     private int bookEdition;
     private String status;
     private String location;
+    private int copy;
 
-    public Book(String bookISBN, String bookName, String author, String publicationYear, String categoryName, String publisherName, String publicationLanguage, int bookEdition, String status, String location) {
+    public Book(String bookISBN, String bookName, String author, String publicationYear, String categoryName, String publisherName, String publicationLanguage, int bookEdition, String status, String location, int copy) {
         this.bookISBN = bookISBN;
         this.bookName = bookName;
         this.author = author;
@@ -23,6 +29,7 @@ public class Book {
         this.bookEdition = bookEdition;
         this.status = status;
         this.location = location;
+        this.copy = copy;
     }
     
         public String getBookISBN() {
@@ -38,7 +45,7 @@ public class Book {
     }
 
     public String getPublicationYear() {
-        return publicationYear;
+        return publicationYear; 
     }
 
     public String getCategoryName() {

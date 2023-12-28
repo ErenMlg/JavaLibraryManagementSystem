@@ -8,4 +8,5 @@ public interface CategoryDao {
     
     public ArrayList<Categories> getAllCategories();
     
+    public Boolean addCategory(String categoryName);
 }

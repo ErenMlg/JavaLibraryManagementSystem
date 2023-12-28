@@ -1,12 +1,17 @@
 
 package javalibrarymanagement.forms.memberForms;
 
+import javalibrarymanagement.forms.memberForms.memberRequests.BookRequestsForMember;
+import javalibrarymanagement.forms.memberForms.borrow.ShowBooksForMember;
+import javalibrarymanagement.forms.memberForms.events.EventsForMember;
+import javalibrarymanagement.forms.memberForms.annoucements.AnnoucementsForMember;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import javalibrarymanagement.data.LibraryService;
 import javalibrarymanagement.data.model.*;
 import javalibrarymanagement.forms.Login;
 import javalibrarymanagement.utils.CenterScreen;
+import javalibrarymanagement.utils.TableDecarator;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -17,7 +22,7 @@ public class MemberIntro extends javax.swing.JFrame {
     private final DefaultTableModel model;
     private ArrayList<BookIssue> allIssues = new ArrayList<>();
     private final DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-    private final LibraryService service = new LibraryService();
+    private final LibraryService service = LibraryService.getInstance();
 
     public MemberIntro(Member member) {
         initComponents();
@@ -30,6 +35,7 @@ public class MemberIntro extends javax.swing.JFrame {
         txtWelcome.setText(currentMember.getUserName());
         model = (DefaultTableModel)tblCurrentBooks.getModel();
         allIssues = service.getMyIssues(currentMember);
+        TableDecarator.tableCustomize(tblCurrentBooks);
         for(BookIssue issue:allIssues){
             Object[] row = {
                 issue.getISBN(),

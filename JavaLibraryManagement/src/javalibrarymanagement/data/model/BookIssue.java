@@ -6,6 +6,21 @@ package javalibrarymanagement.data.model;
 
 public class BookIssue {
 
+    public BookIssue(String ISBN, String bookName, String authorName, String librarianName, String status, String borrowingDate, String returnDate, String memberName) {
+        this.ISBN = ISBN;
+        this.bookName = bookName;
+        this.authorName = authorName;
+        this.librarianName = librarianName;
+        this.status = status;
+        this.borrowingDate = borrowingDate;
+        this.returnDate = returnDate;
+        this.memberName = memberName;
+    }
+    
+    public String getMemberName() {
+        return memberName;
+    }
+
     public String getISBN() {
         return ISBN;
     }
@@ -40,14 +55,7 @@ public class BookIssue {
     private String status;
     private String borrowingDate;
     private String returnDate;
+    private String memberName;
     
-    public BookIssue(String ISBN, String bookName, String authorName, String librarianName, String status, String borrowingDate, String returnDate) {
-        this.ISBN = ISBN;
-        this.bookName = bookName;
-        this.authorName = authorName;
-        this.librarianName = librarianName;
-        this.status = status;
-        this.borrowingDate = borrowingDate;
-        this.returnDate = returnDate;
-    }
+
 }

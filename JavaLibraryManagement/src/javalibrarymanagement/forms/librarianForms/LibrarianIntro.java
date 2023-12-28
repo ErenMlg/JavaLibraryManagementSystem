@@ -1,8 +1,11 @@
 package javalibrarymanagement.forms.librarianForms;
 
+import javalibrarymanagement.forms.librarianForms.takeBack.BorrowReturnLibrarian;
+import javalibrarymanagement.forms.librarianForms.userWorks.UserWorksLibrarian;
 import java.awt.event.WindowEvent;
 import javalibrarymanagement.data.model.*;
 import javalibrarymanagement.forms.Login;
+import javalibrarymanagement.forms.librarianForms.bookWorks.BookWorksLibrarian;
 import javalibrarymanagement.utils.CenterScreen;
 
 public class LibrarianIntro extends javax.swing.JFrame {
@@ -128,16 +131,26 @@ public class LibrarianIntro extends javax.swing.JFrame {
         btnLibrarianWorks.setBackground(new java.awt.Color(0, 102, 102));
         btnLibrarianWorks.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         btnLibrarianWorks.setForeground(new java.awt.Color(255, 255, 255));
-        btnLibrarianWorks.setText("Borrow / Return");
+        btnLibrarianWorks.setText("Take Book Return");
         btnLibrarianWorks.setBorderPainted(false);
         btnLibrarianWorks.setFocusPainted(false);
+        btnLibrarianWorks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLibrarianWorksActionPerformed(evt);
+            }
+        });
 
         btnLibraryWorks.setBackground(new java.awt.Color(0, 102, 102));
         btnLibraryWorks.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         btnLibraryWorks.setForeground(new java.awt.Color(255, 255, 255));
-        btnLibraryWorks.setText("Library Works");
+        btnLibraryWorks.setText("Book Works");
         btnLibraryWorks.setBorderPainted(false);
         btnLibraryWorks.setFocusPainted(false);
+        btnLibraryWorks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLibraryWorksActionPerformed(evt);
+            }
+        });
 
         btnAnnoucementWorks.setBackground(new java.awt.Color(0, 102, 102));
         btnAnnoucementWorks.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
@@ -149,7 +162,7 @@ public class LibrarianIntro extends javax.swing.JFrame {
         btnRequestWorks.setBackground(new java.awt.Color(0, 102, 102));
         btnRequestWorks.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         btnRequestWorks.setForeground(new java.awt.Color(255, 255, 255));
-        btnRequestWorks.setText("Requests");
+        btnRequestWorks.setText("Give Book");
         btnRequestWorks.setBorderPainted(false);
         btnRequestWorks.setFocusPainted(false);
 
@@ -160,27 +173,28 @@ public class LibrarianIntro extends javax.swing.JFrame {
             .addGroup(librarianLeftLayout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(librarianLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(librarianLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, librarianLeftLayout.createSequentialGroup()
-                            .addComponent(btnLibrarianWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(librarianLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(librarianLeftLayout.createSequentialGroup()
+                            .addComponent(btnUserWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
-                            .addComponent(btnAnnoucementWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(252, 252, 252))
-                        .addGroup(librarianLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btnEventWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(librarianLeftLayout.createSequentialGroup()
+                            .addComponent(txtWelcome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnChangeUser, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(26, 26, 26)
+                            .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, librarianLeftLayout.createSequentialGroup()
+                        .addGroup(librarianLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(librarianLeftLayout.createSequentialGroup()
-                                .addComponent(btnUserWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnLibrarianWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnEventWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(librarianLeftLayout.createSequentialGroup()
-                                .addComponent(txtWelcome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnAnnoucementWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, librarianLeftLayout.createSequentialGroup()
+                                .addComponent(btnRequestWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnChangeUser, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26)
-                                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(librarianLeftLayout.createSequentialGroup()
-                        .addComponent(btnLibraryWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnRequestWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnLibraryWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(252, 252, 252)))
                 .addGap(794, 794, 794))
         );
         librarianLeftLayout.setVerticalGroup(
@@ -201,8 +215,8 @@ public class LibrarianIntro extends javax.swing.JFrame {
                     .addComponent(btnAnnoucementWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(librarianLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLibraryWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRequestWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnRequestWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLibraryWorks, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
@@ -238,6 +252,18 @@ public class LibrarianIntro extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnUserWorksActionPerformed
+
+    private void btnLibrarianWorksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibrarianWorksActionPerformed
+        new BorrowReturnLibrarian(currentLibrarian).setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnLibrarianWorksActionPerformed
+
+    private void btnLibraryWorksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibraryWorksActionPerformed
+        new BookWorksLibrarian(currentLibrarian).setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnLibraryWorksActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

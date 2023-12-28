@@ -41,5 +41,16 @@ public class CategoryDaoImpl implements CategoryDao{
         }
         return categoryList;
     }
+
+    @Override
+    public Boolean addCategory(String categoryName) {
+        Boolean result = false;
+        try{
+            result = statement.execute("INSERT INTO `library_management_system`.`category` (`categoryName`) VALUES ('"+categoryName+"');"); 
+        }catch(SQLException e){
+            System.err.println(e);
+        }
+        return result;
+    }
     
 }
