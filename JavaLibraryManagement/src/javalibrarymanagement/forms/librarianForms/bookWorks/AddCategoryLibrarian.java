@@ -181,7 +181,7 @@ public class AddCategoryLibrarian extends javax.swing.JFrame {
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         if(!service.addCategory(etName.getText())){
             JOptionPane.showMessageDialog(this, "Category added", "Success",JOptionPane.INFORMATION_MESSAGE);
-            new AddBookLibrarian(currentLibrarian).setVisible(true);
+            new BookWorksLibrarian(currentLibrarian).setVisible(true);
             this.setVisible(false);
             this.dispose();
         }else{

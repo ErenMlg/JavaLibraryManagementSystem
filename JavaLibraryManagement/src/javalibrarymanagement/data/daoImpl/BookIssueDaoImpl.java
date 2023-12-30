@@ -79,5 +79,16 @@ public class BookIssueDaoImpl implements BookIssueDao{
         }
         return allIssues;
     }
+
+    @Override
+    public Boolean createIssue(String bookISBN,String memberID,int librarianID,String issueDate,String status) {
+        Boolean result = true;
+        try{
+            result = statement.execute("INSERT INTO `library_management_system`.`book_issue` (`bookISBN`, `memberID`, `librarianID`, `issueDate`, `issueStatus`) VALUES ('"+bookISBN+"', '"+memberID+"', '"+librarianID+"', '"+issueDate+"', '"+status+"');");
+        }catch(SQLException e){
+            System.err.println(e);
+        }
+        return result;
+    }
     
 }

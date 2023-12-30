@@ -7,6 +7,8 @@ import javalibrarymanagement.data.model.Member;
 
 public interface BorrowRequestDao {
     
+    public ArrayList<BorrowRequest> gelAllRequests();
+    
     public ArrayList<BorrowRequest> getMemberRequests(String memberID);
     
     public Boolean isSelectedBookRequested(Member member, String bookID);
@@ -15,4 +17,10 @@ public interface BorrowRequestDao {
     
     public Boolean deleteBorrowRequestFromUser(String bookID, Member member);
     
+    public Boolean approveRequest(String memberID, String bookISBN);
+    
+    public Boolean rejectRequest(String memberID, String bookISBN);
+    
+    public Boolean closeRequest(String memberID, String bookISBN);
 }
+

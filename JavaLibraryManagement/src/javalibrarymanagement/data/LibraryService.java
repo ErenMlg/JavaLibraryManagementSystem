@@ -107,8 +107,16 @@ public class LibraryService {
     public ArrayList<BookIssue> getAllIssues(){
         return bookIssueDao.getAllIssues();
     }
+    
+    public Boolean createIssue(String bookISBN,String memberID,int librarianID,String issueDate,String status){
+        return bookIssueDao.createIssue(bookISBN, memberID, librarianID, issueDate, status);
+    }
          
     //Request
+    public ArrayList<BorrowRequest> getAllRequests(){
+        return borrowRequestDao.gelAllRequests();
+    }
+    
     public ArrayList<BorrowRequest> getMemberRequests(String memberID){
         return borrowRequestDao.getMemberRequests(memberID);
     }
@@ -123,6 +131,18 @@ public class LibraryService {
     
     public Boolean deleteBorrowRequestFromUser(String bookID, Member member){
         return borrowRequestDao.deleteBorrowRequestFromUser(bookID, member);
+    }
+        
+    public Boolean approveRequest(String memberID, String bookISBN){
+        return borrowRequestDao.approveRequest(memberID, bookISBN);
+    }
+    
+    public Boolean rejectRequest(String memberID, String bookISBN){
+        return borrowRequestDao.rejectRequest(memberID, bookISBN);
+    }
+    
+    public Boolean closeRequest(String memberID, String bookISBN){
+        return borrowRequestDao.closeRequest(memberID, bookISBN);
     }
     
     //Categories

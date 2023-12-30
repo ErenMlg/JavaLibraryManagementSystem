@@ -46,7 +46,11 @@ public class BookIssue {
     }
 
     public String getReturnDate() {
-        return returnDate;
+        if(returnDate == null){
+            return "Not Returned";
+        }else{
+            return returnDate;
+        }
     }
     private String ISBN;
     private String bookName;

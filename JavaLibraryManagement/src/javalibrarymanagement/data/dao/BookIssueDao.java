@@ -11,4 +11,6 @@ public interface BookIssueDao {
     public Boolean returnBook(String returnDate, String memberID, String bookISBN);
     
     public ArrayList<BookIssue> getAllIssues();
+    
+    public Boolean createIssue(String bookISBN,String memberID,int librarianID,String issueDate,String status);
 }

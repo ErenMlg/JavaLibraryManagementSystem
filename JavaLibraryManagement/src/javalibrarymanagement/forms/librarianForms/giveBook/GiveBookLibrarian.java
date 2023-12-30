@@ -1,10 +1,14 @@
-package javalibrarymanagement.forms.librarianForms.takeBack;
+package javalibrarymanagement.forms.librarianForms.giveBook;
 
+import javalibrarymanagement.forms.librarianForms.takeBack.*;
 import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javalibrarymanagement.data.LibraryService;
 import javalibrarymanagement.data.model.BookIssue;
+import javalibrarymanagement.data.model.BorrowRequest;
 import javalibrarymanagement.data.model.Librarian;
 import javalibrarymanagement.data.model.Member;
 import javalibrarymanagement.forms.librarianForms.LibrarianIntro;
@@ -15,33 +19,40 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-public class BorrowReturnLibrarian extends javax.swing.JFrame {
+public class GiveBookLibrarian extends javax.swing.JFrame {
 
-    private final Librarian currentLibrarian;  
+    private final Librarian currentLibrarian;
+    private final LibraryService service = LibraryService.getInstance();    
     private final DefaultTableModel model;
     private final DefaultTableModel model2;
+    private final DefaultTableModel model3;
     private final DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-    private final LibraryService service = LibraryService.getInstance();  
-    private ArrayList<Member> memberList = service.getAllMembers();
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private ArrayList<Member> memberList = service.getAllMembers();
     private ArrayList<BookIssue> issueList = service.getAllIssues();
+    private ArrayList<BorrowRequest> requestList = service.getAllRequests();
     
-    public BorrowReturnLibrarian(Librarian librarian) {
+    public GiveBookLibrarian(Librarian librarian) {
         initComponents();
         CenterScreen.centerScreen(this);
         currentLibrarian = librarian;
         txtWelcome.setText("Librarian : "+currentLibrarian.getLibrarianName());
         model = (DefaultTableModel)tblMembers.getModel();
         model2 = (DefaultTableModel)tblBorrows.getModel();
+        model3 = (DefaultTableModel)tblRequest.getModel();
         centerRenderer.setHorizontalAlignment( JLabel.CENTER );
         tblMembers.setDefaultRenderer(String.class, centerRenderer);
         tblMembers.setDefaultRenderer(int.class, centerRenderer);
         tblBorrows.setDefaultRenderer(String.class, centerRenderer);
-        tblBorrows.setDefaultRenderer(int.class, centerRenderer);
+        tblBorrows.setDefaultRenderer(int.class, centerRenderer);    
+        tblRequest.setDefaultRenderer(String.class, centerRenderer);
+        tblRequest.setDefaultRenderer(int.class, centerRenderer);
         addMembersToTable(memberList);
         addIssuessToTable(issueList);
+        addRequestsToTable(requestList);
         TableDecarator.tableCustomize(tblMembers);
         TableDecarator.tableCustomize(tblBorrows);
+        TableDecarator.tableCustomize(tblRequest);
     }
 
    
@@ -67,12 +78,16 @@ public class BorrowReturnLibrarian extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblBorrows = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        etReturnDate = new com.toedter.calendar.JDateChooser();
-        btnTakeBack = new javax.swing.JButton();
         btnSelectUser = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblRequest = new javax.swing.JTable();
+        jLabel8 = new javax.swing.JLabel();
+        btnApprove = new javax.swing.JButton();
+        btnGive = new javax.swing.JButton();
+        btnReject = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(204, 153, 0));
         jPanel1.setPreferredSize(new java.awt.Dimension(1500, 530));
@@ -100,16 +115,16 @@ public class BorrowReturnLibrarian extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(95, 95, 95)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(230, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addGap(172, 172, 172))
         );
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(0, 0, 230, 550);
+        jPanel2.setBounds(0, 0, 230, 730);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -231,37 +246,99 @@ public class BorrowReturnLibrarian extends javax.swing.JFrame {
             tblBorrows.getColumnModel().getColumn(1).setResizable(false);
             tblBorrows.getColumnModel().getColumn(2).setResizable(false);
             tblBorrows.getColumnModel().getColumn(3).setResizable(false);
+            tblBorrows.getColumnModel().getColumn(3).setHeaderValue("Member");
             tblBorrows.getColumnModel().getColumn(4).setResizable(false);
             tblBorrows.getColumnModel().getColumn(5).setResizable(false);
             tblBorrows.getColumnModel().getColumn(6).setResizable(false);
+            tblBorrows.getColumnModel().getColumn(6).setHeaderValue("Return Date");
             tblBorrows.getColumnModel().getColumn(7).setResizable(false);
         }
 
         jLabel4.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jLabel4.setText("Borrows");
 
-        jLabel7.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jLabel7.setText("Return Date");
-
-        etReturnDate.setDateFormatString("d MM y");
-
-        btnTakeBack.setBackground(new java.awt.Color(0, 102, 102));
-        btnTakeBack.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        btnTakeBack.setForeground(new java.awt.Color(255, 255, 255));
-        btnTakeBack.setText("Take Back The Book");
-        btnTakeBack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTakeBackActionPerformed(evt);
-            }
-        });
-
         btnSelectUser.setBackground(new java.awt.Color(0, 102, 102));
         btnSelectUser.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         btnSelectUser.setForeground(new java.awt.Color(255, 255, 255));
         btnSelectUser.setText("Select User");
+        btnSelectUser.setBorderPainted(false);
+        btnSelectUser.setFocusPainted(false);
         btnSelectUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSelectUserActionPerformed(evt);
+            }
+        });
+
+        tblRequest.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ISBN", "Book", "Author", "Member", "Request Date", "Status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblRequest.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(tblRequest);
+        if (tblRequest.getColumnModel().getColumnCount() > 0) {
+            tblRequest.getColumnModel().getColumn(0).setResizable(false);
+            tblRequest.getColumnModel().getColumn(1).setResizable(false);
+            tblRequest.getColumnModel().getColumn(2).setResizable(false);
+            tblRequest.getColumnModel().getColumn(3).setResizable(false);
+            tblRequest.getColumnModel().getColumn(4).setResizable(false);
+            tblRequest.getColumnModel().getColumn(5).setResizable(false);
+        }
+
+        jLabel8.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        jLabel8.setText("Requests");
+
+        btnApprove.setBackground(new java.awt.Color(0, 102, 102));
+        btnApprove.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        btnApprove.setForeground(new java.awt.Color(255, 255, 255));
+        btnApprove.setText("Approve Request");
+        btnApprove.setBorderPainted(false);
+        btnApprove.setFocusPainted(false);
+        btnApprove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnApproveActionPerformed(evt);
+            }
+        });
+
+        btnGive.setBackground(new java.awt.Color(0, 102, 102));
+        btnGive.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        btnGive.setForeground(new java.awt.Color(255, 255, 255));
+        btnGive.setText("Give Book");
+        btnGive.setBorderPainted(false);
+        btnGive.setFocusPainted(false);
+        btnGive.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGiveActionPerformed(evt);
+            }
+        });
+
+        btnReject.setBackground(new java.awt.Color(0, 102, 102));
+        btnReject.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        btnReject.setForeground(new java.awt.Color(255, 255, 255));
+        btnReject.setText("Reject Request");
+        btnReject.setBorderPainted(false);
+        btnReject.setFocusPainted(false);
+        btnReject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRejectActionPerformed(evt);
             }
         });
 
@@ -281,8 +358,12 @@ public class BorrowReturnLibrarian extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel4))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(90, 90, 90)
                         .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -290,16 +371,19 @@ public class BorrowReturnLibrarian extends javax.swing.JFrame {
                         .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnGive, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(etName)
-                            .addComponent(btnTakeBack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(etReturnDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(etID, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7)
-                            .addComponent(btnSelectUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addGap(38, 38, 38))
+                            .addComponent(etID)
+                            .addComponent(btnSelectUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnApprove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(btnReject, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -327,19 +411,23 @@ public class BorrowReturnLibrarian extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
+                        .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(etReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnTakeBack, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(42, Short.MAX_VALUE))
+                        .addComponent(btnReject, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGive, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel3);
-        jPanel3.setBounds(230, 0, 1270, 550);
+        jPanel3.setBounds(230, 0, 1270, 730);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -349,7 +437,7 @@ public class BorrowReturnLibrarian extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 728, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -379,33 +467,6 @@ public class BorrowReturnLibrarian extends javax.swing.JFrame {
         addMembersToTable(memberList);
     }//GEN-LAST:event_etNameKeyReleased
 
-    private void btnTakeBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTakeBackActionPerformed
-        int selectedRow = tblBorrows.getSelectedRow();
-        if(etReturnDate.getDate() != null){
-            if(selectedRow != -1){
-                String date = sdf.format(etReturnDate.getDate());
-                String memberID = service.searchMembersWithName(tblBorrows.getValueAt(selectedRow, 3).toString()).get(0).getUserID();
-                String bookISBN = tblBorrows.getValueAt(selectedRow, 0).toString();
-                System.err.println(memberID);
-                System.err.println(date);
-                System.err.println(bookISBN);
-                if(!service.returnBook(date,memberID,bookISBN)){
-                    model2.setRowCount(0);
-                    issueList = service.getAllIssues();
-                    addIssuessToTable(issueList);
-                    JOptionPane.showMessageDialog(this, "Successfully taked back", "Success",JOptionPane.INFORMATION_MESSAGE);
-                }else{
-                    JOptionPane.showMessageDialog(this, "Error", "Error",JOptionPane.INFORMATION_MESSAGE);
-                }
-            }else{
-                JOptionPane.showMessageDialog(this, "Please select borrow in the table", "Error",JOptionPane.ERROR_MESSAGE);
-            }
-        }else{
-            JOptionPane.showMessageDialog(this, "Please  enter true date format (dd-mm-yyyy)", "Error",JOptionPane.ERROR_MESSAGE);
-        }
-        
-    }//GEN-LAST:event_btnTakeBackActionPerformed
-
     private void btnSelectUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectUserActionPerformed
         int selectedRow = tblMembers.getSelectedRow();
         if(selectedRow != -1){
@@ -413,10 +474,71 @@ public class BorrowReturnLibrarian extends javax.swing.JFrame {
             Member member = service.searchMembersWithName(tblMembers.getValueAt(selectedRow, 1).toString()).get(0);
             issueList = service.getMyIssues(member);
             addIssuessToTable(issueList);
+            model3.setRowCount(0);
+            requestList = service.getMemberRequests(member.getUserID());
+            addRequestsToTable(requestList);
         }else{
             JOptionPane.showMessageDialog(this, "Please select member in the table", "Error",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSelectUserActionPerformed
+
+    private void btnApproveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApproveActionPerformed
+        int selectedRow = tblRequest.getSelectedRow();
+        if(selectedRow != -1){
+            Member member = service.searchMembersWithName(tblRequest.getValueAt(selectedRow, 3).toString()).get(0);
+            if(!service.approveRequest(member.getUserID(), tblRequest.getValueAt(selectedRow, 0).toString())){
+                model3.setRowCount(0);
+                requestList = service.getAllRequests();
+                addRequestsToTable(requestList);
+                JOptionPane.showMessageDialog(this, "Request successfully approved.", "Success",JOptionPane.INFORMATION_MESSAGE);
+            }else{
+            JOptionPane.showMessageDialog(this, "Error", "Error",JOptionPane.ERROR_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Please select request in the table", "Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnApproveActionPerformed
+
+    private void btnGiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGiveActionPerformed
+        int selectedRow = tblRequest.getSelectedRow();
+        String bookISBN = tblRequest.getValueAt(selectedRow, 0).toString();
+        if(selectedRow != -1){
+            Member member = service.searchMembersWithName(tblRequest.getValueAt(selectedRow, 3).toString()).get(0);
+            if(!service.createIssue(bookISBN, member.getUserID(), currentLibrarian.getLibrarianID(), LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), "0")){
+                if(!service.closeRequest(member.getUserID(), bookISBN) ){
+                    model3.setRowCount(0);
+                    requestList = service.getAllRequests();
+                    addRequestsToTable(requestList);
+                    model2.setRowCount(0);
+                    JOptionPane.showMessageDialog(this, "Book successfully gived.", "Success",JOptionPane.INFORMATION_MESSAGE);   
+                }else{
+                    JOptionPane.showMessageDialog(this, "Error", "Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }else{
+            JOptionPane.showMessageDialog(this, "Error", "Error",JOptionPane.ERROR_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Please select request in the table", "Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnGiveActionPerformed
+
+    private void btnRejectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRejectActionPerformed
+        int selectedRow = tblRequest.getSelectedRow();
+        String bookISBN = tblRequest.getValueAt(selectedRow, 0).toString();
+        if(selectedRow != -1){
+            Member member = service.searchMembersWithName(tblRequest.getValueAt(selectedRow, 3).toString()).get(0);
+            if(!service.rejectRequest(member.getUserID(), bookISBN)){ 
+                model3.setRowCount(0);
+                requestList = service.getAllRequests();
+                addRequestsToTable(requestList);
+                JOptionPane.showMessageDialog(this, "Request successfully rejected.", "Success",JOptionPane.INFORMATION_MESSAGE);
+            }else{
+            JOptionPane.showMessageDialog(this, "Error", "Error",JOptionPane.ERROR_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Please select request in the table", "Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnRejectActionPerformed
 
     private Object[] mapMembersForTable(Member searchedMember){
         Object[] row = {
@@ -440,7 +562,7 @@ public class BorrowReturnLibrarian extends javax.swing.JFrame {
         }
     }
     
-        private Object[] mapIssueForTable(BookIssue issue){
+    private Object[] mapIssueForTable(BookIssue issue){
         Object[] row = {
                 issue.getISBN(),
                 issue.getBookName(),
@@ -460,30 +582,52 @@ public class BorrowReturnLibrarian extends javax.swing.JFrame {
             model2.addRow(row);
         }
     }
+    
+    private Object[] mapRequestsForTable(BorrowRequest request){
+        Object[] row = {
+            request.getBookISBN(),
+            request.getBookName(),
+            request.getBookAuthor(),
+            request.getMemberName(),
+            request.getRequestDate(),
+            request.getRequestStatus()
+        };
+        return row;
+    }
+    
+    private void addRequestsToTable(ArrayList<BorrowRequest> borrowRequests){
+        for(BorrowRequest request:borrowRequests){
+            Object[] row = mapRequestsForTable(request);
+            model3.addRow(row);
+        }
+    }
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnApprove;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnGive;
+    private javax.swing.JButton btnReject;
     private javax.swing.JButton btnSelectUser;
-    private javax.swing.JButton btnTakeBack;
     private javax.swing.JTextField etID;
     private javax.swing.JTextField etName;
-    private com.toedter.calendar.JDateChooser etReturnDate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable tblBorrows;
     private javax.swing.JTable tblMembers;
+    private javax.swing.JTable tblRequest;
     private javax.swing.JLabel txtWelcome;
     // End of variables declaration//GEN-END:variables
 }

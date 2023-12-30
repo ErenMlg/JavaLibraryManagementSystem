@@ -3,6 +3,10 @@ package javalibrarymanagement.data.model;
 public class Librarian {
 
     private int librarianID;
+
+    public int getLibrarianID() {
+        return librarianID;
+    }
     private String librarianName;
     private String librarianSurname;
     private String librarianPhone;

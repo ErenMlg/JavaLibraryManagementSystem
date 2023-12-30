@@ -6,6 +6,7 @@ import java.awt.event.WindowEvent;
 import javalibrarymanagement.data.model.*;
 import javalibrarymanagement.forms.Login;
 import javalibrarymanagement.forms.librarianForms.bookWorks.BookWorksLibrarian;
+import javalibrarymanagement.forms.librarianForms.giveBook.GiveBookLibrarian;
 import javalibrarymanagement.utils.CenterScreen;
 
 public class LibrarianIntro extends javax.swing.JFrame {
@@ -165,6 +166,11 @@ public class LibrarianIntro extends javax.swing.JFrame {
         btnRequestWorks.setText("Give Book");
         btnRequestWorks.setBorderPainted(false);
         btnRequestWorks.setFocusPainted(false);
+        btnRequestWorks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRequestWorksActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout librarianLeftLayout = new javax.swing.GroupLayout(librarianLeft);
         librarianLeft.setLayout(librarianLeftLayout);
@@ -264,6 +270,12 @@ public class LibrarianIntro extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnLibraryWorksActionPerformed
+
+    private void btnRequestWorksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRequestWorksActionPerformed
+        new GiveBookLibrarian(currentLibrarian).setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnRequestWorksActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

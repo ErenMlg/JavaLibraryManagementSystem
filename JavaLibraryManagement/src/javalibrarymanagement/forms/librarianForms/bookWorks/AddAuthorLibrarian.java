@@ -198,7 +198,7 @@ public class AddAuthorLibrarian extends javax.swing.JFrame {
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         if(!service.addAuthor(etName.getText(), etSurname.getText())){
             JOptionPane.showMessageDialog(this, "Author added", "Success",JOptionPane.INFORMATION_MESSAGE);
-            new AddBookLibrarian(currentLibrarian).setVisible(true);
+            new BookWorksLibrarian(currentLibrarian).setVisible(true);
             this.setVisible(false);
             this.dispose();
         }else{
