@@ -6,6 +6,11 @@ public class Book {
     public int getCopy() {
         return copy;
     }
+    
+    public String printInfo(){
+        return "Name:"+bookName + " Author:"+author+" Publisher:"+publisherName+" Year:"+publicationYear;
+    }
+    
     private String bookISBN;
     private String bookName;
     private String author;

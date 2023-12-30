@@ -504,7 +504,7 @@ public class GiveBookLibrarian extends javax.swing.JFrame {
         String bookISBN = tblRequest.getValueAt(selectedRow, 0).toString();
         if(selectedRow != -1){
             Member member = service.searchMembersWithName(tblRequest.getValueAt(selectedRow, 3).toString()).get(0);
-            if(!service.createIssue(bookISBN, member.getUserID(), currentLibrarian.getLibrarianID(), LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), "0")){
+            if(!service.createIssue(bookISBN, member.getUserID(), currentLibrarian.getLibrarianID(), LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), "0", service.searchWithISBN(bookISBN).get(0).getCopy())){
                 if(!service.closeRequest(member.getUserID(), bookISBN) ){
                     model3.setRowCount(0);
                     requestList = service.getAllRequests();

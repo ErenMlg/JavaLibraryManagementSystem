@@ -5,7 +5,9 @@ import javalibrarymanagement.forms.librarianForms.userWorks.UserWorksLibrarian;
 import java.awt.event.WindowEvent;
 import javalibrarymanagement.data.model.*;
 import javalibrarymanagement.forms.Login;
+import javalibrarymanagement.forms.librarianForms.annoucements.AnnoucementsLibrarian;
 import javalibrarymanagement.forms.librarianForms.bookWorks.BookWorksLibrarian;
+import javalibrarymanagement.forms.librarianForms.events.EventsLibrarian;
 import javalibrarymanagement.forms.librarianForms.giveBook.GiveBookLibrarian;
 import javalibrarymanagement.utils.CenterScreen;
 
@@ -116,6 +118,11 @@ public class LibrarianIntro extends javax.swing.JFrame {
         btnEventWorks.setText("Events");
         btnEventWorks.setBorderPainted(false);
         btnEventWorks.setFocusPainted(false);
+        btnEventWorks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEventWorksActionPerformed(evt);
+            }
+        });
 
         btnUserWorks.setBackground(new java.awt.Color(0, 102, 102));
         btnUserWorks.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
@@ -159,6 +166,11 @@ public class LibrarianIntro extends javax.swing.JFrame {
         btnAnnoucementWorks.setText("Annoucements");
         btnAnnoucementWorks.setBorderPainted(false);
         btnAnnoucementWorks.setFocusPainted(false);
+        btnAnnoucementWorks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnnoucementWorksActionPerformed(evt);
+            }
+        });
 
         btnRequestWorks.setBackground(new java.awt.Color(0, 102, 102));
         btnRequestWorks.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
@@ -276,6 +288,18 @@ public class LibrarianIntro extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnRequestWorksActionPerformed
+
+    private void btnEventWorksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEventWorksActionPerformed
+        new EventsLibrarian(currentLibrarian).setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnEventWorksActionPerformed
+
+    private void btnAnnoucementWorksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnnoucementWorksActionPerformed
+        new AnnoucementsLibrarian(currentLibrarian).setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnAnnoucementWorksActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -304,7 +304,7 @@ public class AddUserLibrarian extends javax.swing.JFrame {
                                             .addGap(3, 3, 3)
                                             .addComponent(lblGradeOrTitle))
                                         .addComponent(etGradeOrTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -389,7 +389,7 @@ public class AddUserLibrarian extends javax.swing.JFrame {
         );
 
         jPanel3.add(jPanel2);
-        jPanel2.setBounds(210, 0, 0, 0);
+        jPanel2.setBounds(220, 0, 960, 440);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -449,7 +449,7 @@ public class AddUserLibrarian extends javax.swing.JFrame {
             default -> JOptionPane.showMessageDialog(this, "Invalid book limit please enter 3 or 5 right.", "Invalid Book Limit",JOptionPane.ERROR_MESSAGE);
         }
         if("Academician".equals(selectedType)){
-            result = service.addMember(memberID, memberName, memberSurname, memberPhone, memberAddress, memberMail, memberUsername, memberPassword, bookLimit, departmantID, etStudentNumber.getText(), 0, etGradeOrTitle.getText(), selectedType);
+            result = service.addMember(memberID, memberName, memberSurname, memberPhone, memberAddress, memberMail, memberUsername, memberPassword, bookLimit, departmantID, "", 0, etGradeOrTitle.getText(), selectedType);
         }else if("Student".equals(selectedType)){
             result = service.addMember(memberID, memberName, memberSurname, memberPhone, memberAddress, memberMail, memberUsername, memberPassword, bookLimit, departmantID, etStudentNumber.getText(), Integer.parseInt(etGradeOrTitle.getText()), "", selectedType);
         }

@@ -47,10 +47,14 @@ public class BookIssueDaoImpl implements BookIssueDao{
     }
 
     @Override
-    public Boolean returnBook(String returnDate, String memberID, String bookISBN) {
+    public Boolean returnBook(String returnDate, String memberID, String bookISBN, int bookCopy) {
         Boolean result = true;
         try{
             result = statement.execute("UPDATE `library_management_system`.`book_issue` SET `returnDate` = '"+returnDate+"', `issueStatus` = '1' WHERE (`memberID` = '"+memberID+"') and (`bookISBN` = '"+bookISBN+"');");
+            results = statement.executeQuery("SELECT COUNT(*) FROM library_management_system.book_issue WHERE book_issue.bookISBN = '"+bookISBN+"' AND book_issue.issueStatus = 0;");
+            results.next();
+            int bookCount = bookCopy - results.getInt(0);
+            statement.execute("UPDATE `library_management_system`.`book` SET `avaibleCopies` = '"+bookCount+"' WHERE (`bookISBN` = '"+bookISBN+"');");
         }catch(SQLException e){
             System.err.println(e);
         }
@@ -81,10 +85,14 @@ public class BookIssueDaoImpl implements BookIssueDao{
     }
 
     @Override
-    public Boolean createIssue(String bookISBN,String memberID,int librarianID,String issueDate,String status) {
+    public Boolean createIssue(String bookISBN,String memberID,int librarianID,String issueDate,String status,int bookCopy) {
         Boolean result = true;
         try{
             result = statement.execute("INSERT INTO `library_management_system`.`book_issue` (`bookISBN`, `memberID`, `librarianID`, `issueDate`, `issueStatus`) VALUES ('"+bookISBN+"', '"+memberID+"', '"+librarianID+"', '"+issueDate+"', '"+status+"');");
+            results = statement.executeQuery("SELECT COUNT(*) FROM library_management_system.book_issue WHERE book_issue.bookISBN = '"+bookISBN+"' AND book_issue.issueStatus = 0;");
+            results.next();
+            int bookCount = bookCopy - results.getInt(0);
+            statement.execute("UPDATE `library_management_system`.`book` SET `avaibleCopies` = '"+bookCount+"' WHERE (`bookISBN` = '"+bookISBN+"');");
         }catch(SQLException e){
             System.err.println(e);
         }

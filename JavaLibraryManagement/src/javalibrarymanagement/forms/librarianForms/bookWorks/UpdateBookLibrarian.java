@@ -9,6 +9,8 @@ import javalibrarymanagement.data.model.Categories;
 import javalibrarymanagement.data.model.Librarian;
 import javalibrarymanagement.data.model.Location;
 import javalibrarymanagement.data.model.Publisher;
+import javalibrarymanagement.patterns.observer.Library;
+import javalibrarymanagement.patterns.observer.LibraryPersonal;
 import javalibrarymanagement.utils.CenterScreen;
 import javax.swing.JOptionPane;
 
@@ -16,18 +18,22 @@ import javax.swing.JOptionPane;
 public class UpdateBookLibrarian extends javax.swing.JFrame {
 
     private final Book selectedBook;
+    private final Library library = Library.getInstance(); 
     private final Librarian currentLibrarian;
     private final LibraryService service = LibraryService.getInstance();
     private final ArrayList<Categories> categoryList = service.getAllCategories();
     private final ArrayList<Location> locationList = service.getAllLocations();
     private final ArrayList<Author> authorList = service.getAllAuthors();
     private final ArrayList<Publisher> publisherList = service.getAllPublisher();
+    private final LibraryPersonal personal; 
     
     public UpdateBookLibrarian(Librarian librarian, Book book) {
         initComponents();
         CenterScreen.centerScreen(this);
         currentLibrarian = librarian;
         selectedBook = book;
+        personal = new LibraryPersonal(currentLibrarian);
+        library.addObserver(personal);
         etCopy.setText(String.valueOf(book.getCopy()));
         etEdition.setText(String.valueOf(book.getBookEdition()));
         etISBN.setText(book.getBookISBN());
@@ -470,8 +476,10 @@ public class UpdateBookLibrarian extends javax.swing.JFrame {
         int author = findIDByAuthorName(cbAuthor.getSelectedItem().toString());
         int publisher = findIDByPublisherName(cbPublisher.getSelectedItem().toString());
         int category = findIDByCategoryName(cbCategory.getSelectedItem().toString());
+        Book book = new Book(bookISBN,name,"",year,"","","",Integer.parseInt(edition),"","",Integer.parseInt(copies));
         if(!service.updateBook(bookISBN, name, year, edition, Integer.parseInt(copies), location, category, publisher, author)){
             JOptionPane.showMessageDialog(this, "Book updated", "Success",JOptionPane.INFORMATION_MESSAGE);
+            library.updateBook(selectedBook, book);
             new BookWorksLibrarian(currentLibrarian).setVisible(true);
             this.setVisible(false);
             this.dispose();

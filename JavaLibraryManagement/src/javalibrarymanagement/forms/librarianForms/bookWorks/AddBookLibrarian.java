@@ -9,6 +9,8 @@ import javalibrarymanagement.data.model.Categories;
 import javalibrarymanagement.data.model.Librarian;
 import javalibrarymanagement.data.model.Location;
 import javalibrarymanagement.data.model.Publisher;
+import javalibrarymanagement.patterns.observer.Library;
+import javalibrarymanagement.patterns.observer.LibraryPersonal;
 import javalibrarymanagement.utils.CenterScreen;
 import javax.swing.JOptionPane;
 
@@ -16,17 +18,21 @@ import javax.swing.JOptionPane;
 public class AddBookLibrarian extends javax.swing.JFrame {
 
     private final Librarian currentLibrarian;
+    private final Library library = Library.getInstance(); 
     private final LibraryService service = LibraryService.getInstance();
     private final ArrayList<Categories> categoryList = service.getAllCategories();
     private final ArrayList<Location> locationList = service.getAllLocations();
     private final ArrayList<Author> authorList = service.getAllAuthors();
     private final ArrayList<Publisher> publisherList = service.getAllPublisher();
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private final LibraryPersonal personal; 
     
     public AddBookLibrarian(Librarian librarian) {
         initComponents();
         CenterScreen.centerScreen(this);
         currentLibrarian = librarian;
+        personal = new LibraryPersonal(currentLibrarian);
+        library.addObserver(personal);
         for(Categories categories:categoryList){
             cbCategory.addItem(categories.getCategoryName());
         }
@@ -458,6 +464,7 @@ public class AddBookLibrarian extends javax.swing.JFrame {
         int category = findIDByCategoryName(cbCategory.getSelectedItem().toString());
         if(!service.addBook(bookISBN, name, year, edition, Integer.parseInt(copies), location, category, publisher, author)){
             JOptionPane.showMessageDialog(this, "Book added", "Success",JOptionPane.INFORMATION_MESSAGE);
+            library.addBook(name);
             new BookWorksLibrarian(currentLibrarian).setVisible(true);
             this.setVisible(false);
             this.dispose();

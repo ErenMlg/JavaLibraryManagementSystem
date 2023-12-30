@@ -389,7 +389,7 @@ public class BorrowReturnLibrarian extends javax.swing.JFrame {
                 System.err.println(memberID);
                 System.err.println(date);
                 System.err.println(bookISBN);
-                if(!service.returnBook(date,memberID,bookISBN)){
+                if(!service.returnBook(date,memberID,bookISBN, service.searchWithISBN(bookISBN).get(0).getCopy())){
                     model2.setRowCount(0);
                     issueList = service.getAllIssues();
                     addIssuessToTable(issueList);

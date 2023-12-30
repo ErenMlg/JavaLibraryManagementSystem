@@ -58,6 +58,22 @@ public class LibraryService {
         return annoucementDao.getAllAnnoucements();
     }
     
+    public Boolean deleteAnnoucements(Annoucement annoucement){
+        return annoucementDao.deleteAnnoucements(annoucement);
+    }
+    
+    public Boolean updateAnnoucements(Annoucement annoucement){
+        return annoucementDao.updateAnnoucements(annoucement);
+    }
+    
+    public Boolean addAnnoucements(Annoucement annoucement, int librarianID){
+        return annoucementDao.addAnnoucements(annoucement, librarianID);
+    }
+    
+    public ArrayList<Annoucement> searchWithNameAnnoucement(String name){
+        return annoucementDao.searchWithName(name);
+    }
+    
     //Books
     public ArrayList<Book> getAllBooks(){
         return bookDao.getAllBooks();
@@ -100,16 +116,16 @@ public class LibraryService {
          return bookIssueDao.getMyIssues(member);
      }
      
-    public Boolean returnBook(String returnDate, String memberID, String bookISBN){
-        return bookIssueDao.returnBook(returnDate, memberID, bookISBN);
+    public Boolean returnBook(String returnDate, String memberID, String bookISBN,int bookCopy){
+        return bookIssueDao.returnBook(returnDate, memberID, bookISBN, bookCopy);
     }
     
     public ArrayList<BookIssue> getAllIssues(){
         return bookIssueDao.getAllIssues();
     }
     
-    public Boolean createIssue(String bookISBN,String memberID,int librarianID,String issueDate,String status){
-        return bookIssueDao.createIssue(bookISBN, memberID, librarianID, issueDate, status);
+    public Boolean createIssue(String bookISBN,String memberID,int librarianID,String issueDate,String status,int bookCopy){
+        return bookIssueDao.createIssue(bookISBN, memberID, librarianID, issueDate, status, bookCopy);
     }
          
     //Request
@@ -162,6 +178,27 @@ public class LibraryService {
     //Events
     public ArrayList<Event> getAllEvents(){
         return eventDao.getAllEvents();
+    }
+    
+    public Boolean deleteEvent(Event event){
+        return eventDao.deleteEvent(event);
+    }
+    
+    public Boolean updateEvent(Event event){
+        return eventDao.updateEvent(event);
+    }
+    
+    public Boolean addEvent(Event event, String librarianID){
+        return eventDao.addEvent(event, librarianID);
+    }
+    
+        
+    public ArrayList<Event> searchWithNameEvents(String name){
+        return eventDao.searchWithName(name);
+    }
+    
+    public ArrayList<Event> searchWithTypeEvents(String type){
+        return eventDao.searchWithType(type);
     }
     
     //Members

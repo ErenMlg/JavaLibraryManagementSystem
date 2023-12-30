@@ -13,6 +13,7 @@ import javalibrarymanagement.data.dao.MemberDao;
 import javalibrarymanagement.data.model.Academician;
 import javalibrarymanagement.data.model.Member;
 import javalibrarymanagement.data.model.Student;
+import javalibrarymanagement.patterns.factories.MemberFactory;
 
 
 public class MemberDaoImpl implements MemberDao{
@@ -220,11 +221,7 @@ public class MemberDaoImpl implements MemberDao{
             result = statement.execute("INSERT INTO `library_management_system`.`member` (`memberID`, `memberName`,`memberSurname`,`memberPhone`,`memberMail`,`memberUserName`,`memberPassword`,`memberAdress`,`bookLimitID`,`departmantID`) VALUES ('"+memberID+"', '"+memberName+"','"+memberSurname+"', '"+memberPhone+"','"+memberMail+"', '"+memberUsername+"','"+memberPassword+"', '"+memberAddress+"','"+bookLimit+"', '"+departmantID+"');");       
             System.err.println("in "+result);
             if(!result){
-                if("Academician".equals(userType)){
-                    result = addAcademician(memberID, title);
-                }else if("Student".equals(userType)){
-                    result = addStudent(memberID, studentNumber, grade);
-                }
+                result = MemberFactory.createMember(memberID, studentNumber, grade, title, userType);
                 if(!result){
                     switch(bookLimit){
                         case 1 -> result = statement.execute("INSERT INTO `library_management_system`.`member_request_limit` (`memberID`, `currentRequestCount`, `avaibleRequestCount`) VALUES ('"+memberID+"', '"+0+"', '"+5+"');");
