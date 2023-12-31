@@ -90,7 +90,7 @@ And More...
 
 ## Database Schema
 <p align="center">
-  <img src="https://github.com/ErenMlg/JavaLibraryManagementSystem/assets/94524411/84e138a5-6a6c-496a-aa9c-af50164f32a8">
+  <img src="https://github.com/ErenMlg/JavaLibraryManagementSystem/assets/94524411/c7d70791-6a29-45f7-b3a3-b0d9b16ca027">
 </p>
 
 
